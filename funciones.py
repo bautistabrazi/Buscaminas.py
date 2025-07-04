@@ -412,8 +412,13 @@ def obtener_puntajes_por_dificultad() -> dict:
 
 
 def hacer_top_puntajes(puntajes:dict) -> dict: # HACER DOCUMENTACION
-
-    """"""
+    """
+    Arma un diccionario con los distintos tops según dificultad.
+    Parametros:
+            puntajes (dict): diccionario con los puntajes (Nombre, Dificultad, Puntaje).
+    Retorna:
+            resultado (dict): diccionario con las 3 listas distintas de puntajes según dificultad.
+    """
 
     titulos = ["Facil", "Medio", "Dificil"]
     resultado = {}
@@ -511,3 +516,5 @@ def cronometrar_juego(timers:dict) -> int:
                 tiempo = (timers["tiempo_derrota"] - timers["tiempo_arranque"]) // 1000
 
     return tiempo
+
+
