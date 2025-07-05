@@ -73,6 +73,8 @@ timers = {
     TIEMPO_DERROTA : 0,
     }
 
+#Puntaje
+PUNTAJE_BASE = 1000
 
 #Texto
 texto_ingresado = ""
