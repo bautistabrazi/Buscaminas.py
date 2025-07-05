@@ -74,7 +74,7 @@ timers = {
     }
 
 #Puntaje
-PUNTAJE_BASE = 1000
+PUNTAJE_BASE = 10000
 
 #Texto
 texto_ingresado = ""
