@@ -274,7 +274,7 @@ def centrar_en_boton(pantalla:pg.Surface, relleno:pg.Surface, boton:pg.Rect) -> 
     pantalla.blit(relleno, (boton.x + boton.w // 2 - relleno.get_width() // 2, boton.y  + boton.h // 2 - relleno.get_height() // 2)) 
 
 
-def icono_y_texto_en_boton(pantalla:pg.Surface, tablero:pg.Surface, icono:pg.Surface, boton:pg.Rect, color:tuple) -> None:
+def poner_icono_y_texto_en_boton(pantalla:pg.Surface, tablero:pg.Surface, icono:pg.Surface, boton:pg.Rect, color:tuple) -> None:
 
     """
     Pone en un boton un icono y un texto
@@ -385,8 +385,10 @@ def reiniciar_temporizador(timers:dict) -> None:
         Nada.
     """
 
-    for tiempo in timers:
-        timers[tiempo] = 0
+    claves = list(timers)
+
+    for i in range(len(claves)):
+        timers[claves[i]] = 0
     
 
 def obtener_puntajes_por_dificultad(archivo:str) -> dict:
@@ -409,10 +411,10 @@ def obtener_puntajes_por_dificultad(archivo:str) -> dict:
             nombre = partes[0]
             dificultad = partes[1]
             puntaje = int(partes[2])
-            claves = list(resultado)
+            dificultades = list(resultado)
             
-            for j in range(len(claves)):
-                if dificultad == claves[j]:
+            for j in range(len(dificultades)):
+                if dificultad == dificultades[j]:
                     resultado[dificultad].append((nombre, puntaje ))
 
     return resultado
@@ -428,19 +430,19 @@ def ordenar_tops(puntajes:dict, ascendente:bool=False) -> dict:
             resultado (dict): diccionario con las 3 listas distintas de puntajes según dificultad.
     """
 
-    titulos = list(puntajes.keys())
+    dificultades = list(puntajes)
     resultado = {}
 
-    for i in range(len(titulos)):
-        titulo = titulos[i]
-        lista = puntajes[titulo]
+    for i in range(len(dificultades)):
+        dificultad = dificultades[i]
+        lista = puntajes[dificultad]
         for i in range(len(lista) - 1):
             for j in range(i + 1, len(lista)):
                 if (ascendente == True and lista[i][1] > lista[j][1]) or (ascendente == False and lista[i][1] < lista[j][1]):
                         aux = lista[i]
                         lista[i] = lista[j]
                         lista[j] = aux
-        resultado[titulo] = lista[:5]
+        resultado[dificultad] = lista[:5]
     return resultado
 
 
@@ -473,9 +475,10 @@ def renderizar_puntajes(pantalla:pg.Surface, fuente:pg.font.Font, puntajes:dict,
     for i in range(len(titulos)):
         titulo = titulos[i]
         x = posiciones_x[i]
-        lista = puntajes.get(titulo, [])
+        lista = puntajes[titulo]
         for j in range(len(lista)):
-            nombre, puntaje = lista[j]
+            nombre = lista[j][0]
+            puntaje = lista[j][1]
             texto = f"{nombre}: {puntaje}"
             superficie_texto = fuente.render(texto, True, color)
             rect = superficie_texto.get_rect(center=(x, y_inicial + j * espacio_entre_lineas))
@@ -483,7 +486,6 @@ def renderizar_puntajes(pantalla:pg.Surface, fuente:pg.font.Font, puntajes:dict,
 
 
 def renderizar_input(usuario:pg.Surface, dimensiones:dict) -> pg.Rect:
-    
     """
     Renderiza un Rect con un ancho minimo que crece si lo que ingresa el usuario es mas largo.
     Parametro:
@@ -492,6 +494,7 @@ def renderizar_input(usuario:pg.Surface, dimensiones:dict) -> pg.Rect:
     Retorna:
         boton_rect (pygame Rect): Retorna un Rect que se utilizara como input.
     """
+    
     if usuario.get_width() + 20 <= 200:
         ancho_boton = 200
     else:
@@ -533,13 +536,18 @@ def guardar_ganador(ganador:list, dict_puntajes:dict, dificultad:str, archivo:st
         if persona[0] == ganador[0]:
             nombre_existente = True
             if ganador[2] > persona[1]: 
-                dict_puntajes[dificultad][i] = (ganador[0], ganador[2])
+                dict_puntajes[dificultad][i] = tuple(ganador[0], ganador[2])
             break
     if nombre_existente == False:
         dict_puntajes[dificultad].append((ganador[0], ganador[2]))
 
     with open(archivo , "w") as puntajes:
         puntajes.write("NOMBRE,DIFICULTAD,PUNTAJE\n")
-        for dificultad_top in dict_puntajes:
-            for nombre, puntaje in dict_puntajes[dificultad_top]:
-                puntajes.write(f"{nombre},{dificultad_top},{puntaje}\n")
+        dificultades = list(dict_puntajes)
+        for i in range(len(dificultades)):
+            dificultad_top = dict_puntajes[dificultades[i]]
+            for j in range(len(dificultad_top)):
+                linea = dificultad_top[j]
+                nombre = linea[0]
+                puntaje = linea[1]
+                puntajes.write(f"{nombre},{dificultades[i]},{puntaje}\n")

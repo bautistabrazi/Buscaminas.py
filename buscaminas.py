@@ -141,7 +141,7 @@ while corriendo:
                     elif boton_volumen_menos.collidepoint(evento.pos) == True:
                         if volumen_sonido > 0.05:
                             volumen_sonido -= 0.05
-                            volumen_sonido = round(volumen_sonido, 2)   # Usamos Round porque sino nos da muchos decimales y no funciona el > 0.05
+                            volumen_sonido = round(volumen_sonido, 2)
                         sonido_juego.set_volume(volumen_sonido)
                     elif boton_volumen_mas.collidepoint(evento.pos) == True:
                         if volumen_sonido < 0.4:
@@ -282,7 +282,7 @@ while corriendo:
         dibujar_boton(pantalla, boton_timer, GRIS_CLARO)
 
 
-        icono_y_texto_en_boton(pantalla, tablero, bandera, boton_banderas, NEGRO)
+        poner_icono_y_texto_en_boton(pantalla, tablero, bandera, boton_banderas, NEGRO)
         centrar_en_boton(pantalla, volver, boton_volver_juego)
         centrar_en_boton(pantalla, facil, boton_facil)
         centrar_en_boton(pantalla, medio, boton_medio)
@@ -295,7 +295,7 @@ while corriendo:
 
         if tablero[DATOS][ESTADO_PARTIDA] == VICTORIA:
             pantalla.blit(fondo_victoria, (0,0))
-            pantalla.blit(puntaje_render, (DIMENSIONES[ANCHO] * 0.5 - timer.get_width() * 0.5, DIMENSIONES[ALTO] * 0.575 - timer.get_height() * 0.5)) 
+            pantalla.blit(puntaje_render, (DIMENSIONES[ANCHO] * 0.5 - puntaje_render.get_width() * 0.5, DIMENSIONES[ALTO] * 0.575 - puntaje_render.get_height() * 0.5)) 
             boton_input = renderizar_input(usuario, DIMENSIONES)
             dibujar_boton(pantalla, boton_input, CREMA_RELLENO)
             pg.draw.rect(pantalla, CREMA_BORDE, boton_input, 2, 10)
